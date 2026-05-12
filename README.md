@@ -27,7 +27,7 @@ This section focuses on the full data science workflow:
 
 📄 [Full Machine Learning Report](./README.pdf)
 
----
+
 
 ## Part 2 — Product & Operationalization
 
