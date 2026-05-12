@@ -48,7 +48,6 @@ Features include:
 - `Product/`
 
 📄 [Full Product & Operationalization Report](./README_product.pdf)
----
 
 ## Technologies Used
 
