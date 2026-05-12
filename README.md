@@ -25,7 +25,7 @@ This section focuses on the full data science workflow:
 - `Feature_Selection.ipynb`
 - `Model_Selection_and_Decision_Modeling.ipynb`
 
-📄 Full report: `README.pdf`
+📄 [Full Machine Learning Report](./README.pdf)
 
 ---
 
@@ -47,8 +47,7 @@ Features include:
 
 - `Product/`
 
-📄 Full report: `README_product.pdf`
-
+📄 [Full Product & Operationalization Report](./README_product.pdf)
 ---
 
 ## Technologies Used
