@@ -1,122 +1,61 @@
-\# Churn Decision Intelligence System
-
-
+# Churn Decision Intelligence System
 
 End-to-end churn prediction, decision modeling, and ML operationalization system using machine learning, FastAPI, and n8n automation.
 
+---
 
-
-\---
-
-
-
-\## Part 1 — Machine Learning \& Decision Modeling
-
-
+## Part 1 — Machine Learning & Decision Modeling
 
 This section focuses on the full data science workflow:
 
+- Data preparation
+- Exploratory data analysis (EDA)
+- Feature engineering
+- Feature selection
+- Model selection
+- Threshold optimization
+- Cost-aware retention simulation
+- Business impact evaluation
 
+### Main Files
 
-\- Data preparation
-
-\- Exploratory data analysis (EDA)
-
-\- Feature engineering
-
-\- Feature selection
-
-\- Model selection
-
-\- Threshold optimization
-
-\- Cost-aware retention simulation
-
-\- Business impact evaluation
-
-
-
-\### Main Files
-
-
-
-\- `DataPrep.ipynb`
-
-\- `EDA.ipynb`
-
-\- `Feature\_Engineering.ipynb`
-
-\- `Feature\_Selection.ipynb`
-
-\- `Model\_Selection\_and\_Decision\_Modeling.ipynb`
-
-
+- `DataPrep.ipynb`
+- `EDA.ipynb`
+- `Feature_Engineering.ipynb`
+- `Feature_Selection.ipynb`
+- `Model_Selection_and_Decision_Modeling.ipynb`
 
 📄 Full report: `README.pdf`
 
+---
 
-
-\---
-
-
-
-\## Part 2 — Product \& Operationalization
-
-
+## Part 2 — Product & Operationalization
 
 This section transforms the churn model into a deployable business decision system.
 
-
-
 Features include:
 
+- FastAPI prediction service
+- Internal preprocessing pipeline
+- Decision logic layer
+- Risk segmentation
+- Retention policy recommendations
+- Batch CSV prediction
+- n8n workflow automation
 
+### Main Folder
 
-\- FastAPI prediction service
+- `Product/`
 
-\- Internal preprocessing pipeline
+📄 Full report: `README_product.pdf`
 
-\- Decision logic layer
+---
 
-\- Risk segmentation
+## Technologies Used
 
-\- Retention policy recommendations
-
-\- Batch CSV prediction
-
-\- n8n workflow automation
-
-
-
-\### Main Folder
-
-
-
-\- `Product/`
-
-
-
-📄 Full report: `README\_product.pdf`
-
-
-
-\---
-
-
-
-\## Technologies Used
-
-
-
-\- Python
-
-\- pandas
-
-\- scikit-learn
-
-\- FastAPI
-
-\- n8n
-
-\- Jupyter Notebook
-
+- Python
+- pandas
+- scikit-learn
+- FastAPI
+- n8n
+- Jupyter Notebook
