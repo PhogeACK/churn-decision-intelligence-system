@@ -1,0 +1,253 @@
+{
+  "name": "Churn prediction simulator",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        -176
+      ],
+      "id": "964be539-0869-4785-91f2-f61206bdeda4",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\Users\\Almog\\.n8n-files\\churn.csv",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        -160
+      ],
+      "id": "676d31be-66d7-4e18-b382-98298984533d",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -16,
+        -80
+      ],
+      "id": "d2d49fee-34e6-4692-80ae-ed2f5b2e2c6d",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const data = item.json;\n\n  let decision;\n\n  if (data.action === \"premium_retention_offer\") {\n    decision = \"Send premium retention offer\";\n  } else if (data.action === \"email_campaign\") {\n    decision = \"Send email campaign\";\n  } else {\n    decision = \"No action\";\n  }\n\n  return {\n    json: {\n      ...data,\n      decision\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "ca6afb64-dffa-4b75-9b1e-15adcfd67644",
+      "name": "decision system code "
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        -224
+      ],
+      "id": "01248e86-05e3-4748-8155-99b30a4bd2a3",
+      "name": "Tracking code"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.filter(item => {\n  const d = item.json;\n\n  return (\n    d.CreditScore !== undefined &&\n    d.Geography !== undefined &&\n    d.Age !== undefined\n  );\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        -80
+      ],
+      "id": "e7d1e97e-2674-42f3-99d9-260d37aa5388",
+      "name": "validation"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const d = item.json;\n\n  return {\n    json: {\n      CreditScore: Number(d.CreditScore),\n      Geography: d.Geography,\n      Gender: d.Gender,\n      Age: Number(d.Age),\n      Tenure: Number(d.Tenure),\n      Balance: Number(d.Balance),\n      NumOfProducts: Number(d.NumOfProducts),\n      HasCrCard: Number(d.HasCrCard),\n      IsActiveMember: Number(d.IsActiveMember),\n      EstimatedSalary: Number(d.EstimatedSalary),\n      Complain: Number(d.Complain),\n\n      // 🔥 FIXED NAMES\n      Satisfaction_Score: Number(d[\"Satisfaction Score\"]),\n      Card_Type: d[\"Card Type\"],\n      Point_Earned: Number(d[\"Point Earned\"])\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        48
+      ],
+      "id": "2b93f9dd-8a7b-4b8c-816e-7e25530e4ecc",
+      "name": "changing field's names "
+    },
+    {
+      "parameters": {
+        "jsCode": "const requestId = Date.now().toString();\n\nreturn items.map(item => {\n  return {\n    json: {\n      ...item.json,\n\n      //  tracking fields\n      timestamp: new Date().toISOString(),\n      request_id: requestId,\n      model_version: \"v1\"\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        -48
+      ],
+      "id": "a4c3cd1e-1125-4c87-a2d7-58bc739aab95",
+      "name": "action routing"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/predict",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        800,
+        -144
+      ],
+      "id": "2e13d2bc-c568-4e28-a422-3e301a79ed22",
+      "name": "API request"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      data: items.map(item => item.json)\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        -80
+      ],
+      "id": "da9056c5-af0d-48e7-ab15-a4660d61f672",
+      "name": "converting items type"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "changing field's names ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "decision system code ": {
+      "main": [
+        [
+          {
+            "node": "action routing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "validation": {
+      "main": [
+        [
+          {
+            "node": "API request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "changing field's names ": {
+      "main": [
+        [
+          {
+            "node": "converting items type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "action routing": {
+      "main": [
+        [
+          {
+            "node": "Tracking code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API request": {
+      "main": [
+        [
+          {
+            "node": "decision system code ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "converting items type": {
+      "main": [
+        [
+          {
+            "node": "validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "900430bb-1e37-40ba-aaf7-6d844110c12a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "79c8fd94c936e4c666fc89a36cc2208e54627d049295107083dd7cf26d91c7e9"
+  },
+  "id": "5p2UHOjwTmGbaT69",
+  "tags": []
+}
